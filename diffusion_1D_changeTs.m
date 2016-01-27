@@ -22,12 +22,12 @@ dt = 10*day; % Timestep [s]
 
 
 %% Numerical parameters
-nx = 201; % Number of gridpoints in x-direction
+nz = 201; % Number of gridpoints in y-direction
 nt = 200; % Number of timesteps to compute
-dz = L/(nx-1); % Spacing of grid
+dz = L/(nz-1); % Spacing of grid
 z = 0:dz:L;% Grid
 % Setup initial temperature profile
-T = ones(size(z))*Ts + ((Q*z)/k);
+T = ones(size(z))*Ts + ((Q*z)/k); %initial T is known based on geotherm
 time = 0;
 
 %% 
@@ -58,13 +58,13 @@ Temperature = capethompson(:,2);    %  and second column into precip
 %% run
 for n=1:nt % Timestep loop
 % Compute new temperature
-Tnew = zeros(1,nx);
-for i=2:nx-1
+Tnew = zeros(1,nz);
+for i=2:nz-1
 Tnew(i) = T(i)+(((T((i+1))-2*T(i)+T((i-1)))/(dz*dz))*(dt*kappa));
 end
 % Set boundary conditions
 Tnew(1) = -3;
-Tnew(nx) = T(nx);
+Tnew(nz) = T(nz);
 % Update temperature and time
 T = Tnew;
 time = time+dt;
